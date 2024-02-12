@@ -7,14 +7,16 @@ RUN set -xe && \
     gettext-base \
     # Remove package lists for smaller image sizes
     && rm -rf /var/lib/apt/lists/* \
-    && which cron \
     && rm -rf /etc/cron.*/*
 
 COPY crontab.template /crontab.template
 COPY entrypoint.sh /entrypoint.sh
 
 # Adding executable permissions
-RUN chmod +x /entrypoint.sh /crontab.template
+RUN chmod +x /entrypoint.sh
+
+# Default cron schedule
+ENV CRON_SCHEDULE="* * * * *"
 
 ENTRYPOINT ["/entrypoint.sh"]
 
